@@ -1,0 +1,7 @@
+name = "zhen-chinese"
+compatibility_date = "2024-04-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "chinese_progress"
+database_id = "local-db-id" # Placeholder for local testing

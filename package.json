@@ -17,6 +17,7 @@
     "vue-router": "^5.2.0"
   },
   "devDependencies": {
-    "sass": "^1.103.1"
+    "sass": "^1.103.1",
+    "wrangler": "^4.125.0"
   }
 }
