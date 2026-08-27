@@ -2,8 +2,17 @@
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,                 -- Unique User ID (e.g. 'usr_10a2f9b8' or UUID)
   email TEXT UNIQUE NOT NULL,          -- User's email address
-  created_at INTEGER NOT NULL,         -- Registration date timestamp
+  password_hash TEXT NOT NULL,
+  is_verified INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,         -- Registration date timestamp
   last_login_at INTEGER                -- Last active timestamp
+);
+
+CREATE TABLE IF NOT EXISTS verification_tokens(
+  token TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  expires_at DATETIME NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- 2. Sentence Progress Table (Stores both Shadowing and Recall ratings)

@@ -3,10 +3,11 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   ssr: true,
   nitro:{
-    preset: 'github-pages',
+    preset: 'cloudflare-pages',
   },
   modules:[
-    "@nuxt/image"
+    "@nuxt/image",
+    'nitro-cloudflare-dev'
   ],
   css:[
     '@/assets/css/main.css'
