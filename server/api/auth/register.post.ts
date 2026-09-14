@@ -76,10 +76,58 @@ export default defineEventHandler(async (event) => {
       .bind(verificationToken, userId, expiresAt),
   ]);
 
+  // 1. Construct the dynamic URL
+  // Use headers to dynamically get the current domain (localhost or production)
+  const host = getRequestHeader(event, "host") || "localhost:3000";
+  const protocol = host?.includes("localhost") ? "http" : "https";
+  const verifyUrl = `${protocol}://${host}/validate/${verificationToken}`;
+
+  // Print to terminal for instant local testing without waiting for an email
+  console.log("\n----------------------------------------");
+  console.log("🔗 LOCAL VERIFICATION LINK:");
+  console.log(verifyUrl);
+  console.log("----------------------------------------\n");
+
+  // 2. Dispatch the email using a transactional API (e.g., Resend)
+  // Ensure you set EMAIL_API_KEY via `npx wrangler secret put EMAIL_API_KEY`
+  const emailApiKey = event.context.cloudflare?.env?.EMAIL_API_KEY as
+    | string
+    | undefined;
+
+  if (emailApiKey) {
+    try {
+      const response = await $fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${emailApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: {
+          from: "Zhen Chinese <onboarding@resend.dev>",
+          to: [normalizedEmail],
+          subject: "Verify your Zhen Chinese Account",
+          html: `
+        <div style="font-family: system-ui, sans-serif; background-color: #0a0a0a; color: #ffffff; padding: 40px; text-align: center;">
+            <h1 style="color: #dc2626;">Welcome to Zhen Chinese</h1>
+            <p>Please confirm your identity to activate your account.</p>
+            <a href="${verifyUrl}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #dc2626; color: #ffffff; text-decoration: none; font-weight: bold; letter-spacing: 1px;">VERIFY ACCOUNT</a>
+          </div>
+          `,
+        },
+      });
+      // Log the response for debugging purposes Remove later
+      console.log("📧 Resend Response:", response);
+    } catch (err) {
+      console.error("Email dispatch failed:", err);
+    }
+  } else {
+    console.warn(
+      "⚠️ EMAIL_API_KEY is not set. Email dispatch skipped. Please set the environment variable for email functionality.",
+    );
+  }
+
   return {
     success: true,
-    message: "User successfully registered",
-    userId,
-    verificationToken, // Remove after development testing
+    message: "Registration successful. Please check your email.",
   };
 });

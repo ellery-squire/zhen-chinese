@@ -58,7 +58,7 @@ async function handleRegister() {
                     <span v-else>Create Account</span>
                 </button>
             </form>
-
+now let's create a sign in with everything we just did, password hash, validation token, etc. remember to check the user validation before signing in
             <!-- Error State -->
             <div v-if="errorMessage" class="feedback error">
                 <strong>Error:</strong> {{ errorMessage }}

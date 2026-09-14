@@ -5,6 +5,7 @@
 .nitro
 .cache
 .wrangler
+.dev.vars
 dist
 
 # Node dependencies
