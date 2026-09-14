@@ -38,3 +38,11 @@ CREATE TABLE IF NOT EXISTS sentence_progress (
 -- Allows instant loading of all 200 sentences when a user enters a level
 CREATE INDEX IF NOT EXISTS idx_user_level 
 ON sentence_progress (user_id, level_id);
+
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id TEXT PRIMARY KEY, 
+  user_id TEXT NOT NULL, 
+  expires_at DATETIME NOT NULL, 
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
