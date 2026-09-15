@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const sessionId = getCookie(event, "auth_session");
+  const sessionId = getCookie(event, "session_id");
   if (!sessionId) {
     return { user: null };
   }
@@ -25,14 +25,14 @@ export default defineEventHandler(async (event) => {
     .first();
 
     if (!result){
-        deleteCookie(event, "auth_session");
+        deleteCookie(event, "session_id");
         return { user: null }; 
     }
 
     // Check if the session has expired
     if (new Date(result.expires_at as string) < new Date()) {
         await db.prepare('DELETE FROM sessions WHERE id = ?').bind(sessionId).run();
-        deleteCookie(event, "auth_session");
+        deleteCookie(event, "session_id");
         return { user: null };
     }
 

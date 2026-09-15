@@ -70,7 +70,8 @@ export default defineEventHandler(async (event) => {
 
   // 5. Set the session cookie in an HTTP-only, secure manner
   const host = getRequestHeader(event, "host") || "";
-  const isSecure = !host.includes("localhost");
+  // const isSecure = !host.includes("localhost");
+  const isSecure = !import.meta.dev; // Use secure cookies in production only
 
   setCookie(event, "session_id", sessionId, {
     httpOnly: true,

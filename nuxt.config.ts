@@ -1,5 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // vite: {
+  //   esbuild: {
+  //     drop: process.env.NODE_ENV === 'production' ? ['console'] : []
+  //   }
+  // },
+  
   compatibilityDate: '2025-07-15',
   ssr: true,
   nitro:{
